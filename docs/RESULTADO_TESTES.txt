@@ -1,0 +1,80 @@
+
+> eco-despensa@1.0.0 test
+> node --test tests/*.test.cjs
+
+TAP version 13
+# Subtest: criação e decimal brasileiro
+ok 1 - criação e decimal brasileiro
+  ---
+  duration_ms: 1.369257
+  type: 'test'
+  ...
+# Subtest: nome inválido
+ok 2 - nome inválido
+  ---
+  duration_ms: 1.609486
+  type: 'test'
+  ...
+# Subtest: quantidade inválida
+ok 3 - quantidade inválida
+  ---
+  duration_ms: 0.301314
+  type: 'test'
+  ...
+# Subtest: datas reais e ano bissexto
+ok 4 - datas reais e ano bissexto
+  ---
+  duration_ms: 0.35311
+  type: 'test'
+  ...
+# Subtest: limites de validade
+ok 5 - limites de validade
+  ---
+  duration_ms: 0.366785
+  type: 'test'
+  ...
+# Subtest: consumo preserva original e registra data
+ok 6 - consumo preserva original e registra data
+  ---
+  duration_ms: 1.682893
+  type: 'test'
+  ...
+# Subtest: bloqueia encerramento duplo
+ok 7 - bloqueia encerramento duplo
+  ---
+  duration_ms: 0.238979
+  type: 'test'
+  ...
+# Subtest: bloqueia id e estado inválidos
+ok 8 - bloqueia id e estado inválidos
+  ---
+  duration_ms: 0.226245
+  type: 'test'
+  ...
+# Subtest: filtros combinados
+ok 9 - filtros combinados
+  ---
+  duration_ms: 0.38464
+  type: 'test'
+  ...
+# Subtest: indicadores por registro
+ok 10 - indicadores por registro
+  ---
+  duration_ms: 1.195093
+  type: 'test'
+  ...
+# Subtest: ordenação não altera coleção
+ok 11 - ordenação não altera coleção
+  ---
+  duration_ms: 8.598889
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 114.567245

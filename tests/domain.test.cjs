@@ -1,0 +1,13 @@
+const test=require('node:test'),assert=require('node:assert/strict'),D=require('../src/domain');
+const f={name:'Arroz',quantity:'2,5',unit:'kg',category:'Grãos e cereais',expiry:'2026-12-05'};const now=new Date('2026-12-01T12:00:00Z');const a=D.create(f,'a',now);
+test('criação e decimal brasileiro',()=>{assert.equal(a.quantity,2.5);assert.equal(a.state,'active');});
+test('nome inválido',()=>assert.throws(()=>D.validate({...f,name:' '})));
+test('quantidade inválida',()=>{for(const quantity of ['0','-2','Infinity','1e3',''])assert.throws(()=>D.validate({...f,quantity}));});
+test('datas reais e ano bissexto',()=>{assert.ok(Number.isNaN(D.parseDate('2026-02-30')));assert.ok(Number.isFinite(D.parseDate('2028-02-29')));assert.throws(()=>D.validate({...f,expiry:'05/12/2026'}));});
+test('limites de validade',()=>{assert.equal(D.status(a,'2026-12-01'),'fresh');assert.equal(D.status(a,'2026-12-02'),'soon');assert.equal(D.status(a,'2026-12-05'),'soon');assert.equal(D.status(a,'2026-12-06'),'expired');});
+test('consumo preserva original e registra data',()=>{const b=D.finish([a],'a','consumed',now);assert.equal(b[0].state,'consumed');assert.equal(b[0].finishedAt,now.toISOString());assert.equal(a.state,'active');});
+test('bloqueia encerramento duplo',()=>assert.throws(()=>D.finish(D.finish([a],'a','discarded',now),'a','consumed',now)));
+test('bloqueia id e estado inválidos',()=>{assert.throws(()=>D.finish([a],'b','consumed'));assert.throws(()=>D.finish([a],'a','active'));});
+test('filtros combinados',()=>{assert.equal(D.filter([a],{query:'ARROZ',category:f.category,mode:'soon'},'2026-12-03').length,1);assert.equal(D.filter([a],{mode:'expired'},'2026-12-03').length,0);});
+test('indicadores por registro',()=>{const b={...a,id:'b',state:'discarded'};assert.deepEqual(D.metrics([a,b],'2026-12-06'),{active:1,soon:0,expired:1,consumed:0,discarded:1});});
+test('ordenação não altera coleção',()=>{const b={...a,id:'b',expiry:'2026-12-01'};const list=[a,b];assert.equal(D.filter(list)[0].id,'b');assert.equal(list[0].id,'a');});
